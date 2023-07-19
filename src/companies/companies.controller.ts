@@ -1,5 +1,5 @@
 import { IUser } from 'src/users/users.interface';
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { Request } from 'express';
 import { User } from 'src/decorator/customize';
 import { CompaniesService } from './companies.service';
@@ -16,8 +16,13 @@ export class CompaniesController {
   }
 
   @Get()
-  findAll() {
-    return this.companiesService.findAll();
+  findAll(
+    @Query("page") currentPage: string,
+    @Query("limit") limit: string,
+    @Query() qs: string,
+  ) {
+
+    return this.companiesService.findAll(+currentPage, +limit, qs);
   }
 
   @Get(':id')
@@ -35,7 +40,10 @@ export class CompaniesController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.companiesService.remove(+id);
+  remove(
+    @Param('id') id: string,
+    @User() user: IUser
+  ) {
+    return this.companiesService.remove(id, user);
   }
 }
