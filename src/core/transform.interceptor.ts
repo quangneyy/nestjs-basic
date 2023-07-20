@@ -4,8 +4,10 @@ import {
   ExecutionContext,
   CallHandler,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { RESPONSE_MESSAGE } from 'src/decorator/customize';
 
 export interface Response<T> {
   statusCode: number;
@@ -16,6 +18,10 @@ export interface Response<T> {
 @Injectable()
 export class TransformInterceptor<T>
   implements NestInterceptor<T, Response<T>> {
+
+      constructor(private reflector: Reflector) { 
+      }
+      
   intercept(
     context: ExecutionContext,
     next: CallHandler,
@@ -25,7 +31,7 @@ export class TransformInterceptor<T>
       .pipe(
         map((data) => ({
           statusCode: context.switchToHttp().getResponse().statusCode,
-        //   message: data.message,
+          message: this.reflector.get<string>(RESPONSE_MESSAGE,context.getHandler()) || '',
           data: data
         })),
       );
