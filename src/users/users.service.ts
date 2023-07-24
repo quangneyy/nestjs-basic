@@ -131,6 +131,13 @@ export class UsersService {
     });
   }
 
+  updatedUserToken = async (refreshToken: string, _id: string) => {
+    return await this.userModel.updateOne(
+      { _id },
+      { refreshToken }
+    )
+  }
+
   async register(user: RegisterUserDto) {
     const { name, email, password, age, gender, address } = user; 
     // add logic check email
