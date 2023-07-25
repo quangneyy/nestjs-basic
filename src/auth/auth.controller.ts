@@ -1,8 +1,9 @@
+import { IUser } from './../users/users.interface';
 import { RegisterUserDto } from './../users/dto/create-user.dto';
 import { LocalAuthGuard } from './local-auth.guard';
-import { Public, ResponseMessage } from './../decorator/customize';
+import { Public, ResponseMessage, User } from './../decorator/customize';
 import { AuthService } from './auth.service';
-import { Body, Controller, Post, Res, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Res, Req, UseGuards, Get } from '@nestjs/common';
 import { Request, Response } from 'express';
 
 @Controller("auth")
@@ -27,5 +28,11 @@ export class AuthController {
   @Post('/register')
   handleRegister(@Body() registerUserDto: RegisterUserDto) {
     return this.authService.register(registerUserDto);
+  }
+
+  @ResponseMessage("Get user information")
+  @Get('/account')
+  handleGetAccount(@User() user: IUser) {
+    return { user };
   }
 }
