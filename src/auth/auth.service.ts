@@ -83,6 +83,7 @@ export class AuthService {
             this.jwtService.verify(refreshToken, {
                 secret: this.configService.get<string>("JWT_REFRESH_TOKEN_SECRET")
             })
+            // todo
         } catch (error) {
             throw new BadRequestException(`Refresh token không hợp lệ. Vui lòng login.`)
         }
