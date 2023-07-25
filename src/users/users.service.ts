@@ -138,6 +138,10 @@ export class UsersService {
     )
   }
 
+  findUserByToken = async (refreshToken: string) => {
+    return await this.userModel.findOne({ refreshToken })
+  }
+
   async register(user: RegisterUserDto) {
     const { name, email, password, age, gender, address } = user; 
     // add logic check email
