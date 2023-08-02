@@ -10,5 +10,4 @@ export class AppController {
     private configService: ConfigService,
     private authService: AuthService
   ) { }
-
 }

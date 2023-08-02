@@ -1,34 +1,49 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { JobService } from './job.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
+import { ResponseMessage, User } from 'src/decorator/customize';
+import { IUser } from 'src/users/users.interface';
+// import { Query } from 'mongoose';
 
-@Controller('job')
+@Controller('jobs')
 export class JobController {
-  constructor(private readonly jobService: JobService) {}
+  constructor(private readonly jobsService: JobService) {}
 
   @Post()
-  create(@Body() createJobDto: CreateJobDto) {
-    return this.jobService.create(createJobDto);
+  @ResponseMessage("Create a new job")
+  create(@Body() createJobDto: CreateJobDto, @User() user: IUser) {
+    return this.jobsService.create(createJobDto, user);
   }
 
   @Get()
-  findAll() {
-    return this.jobService.findAll();
+  @ResponseMessage("Fetch jobs with pagination")
+  findAll(
+    @Query("current") currentPage: string,
+    @Query("pageSize") limit: string,
+    @Query() qs: string
+  ) {
+    return this.jobsService.findAll(+currentPage, +limit, qs);
   }
 
   @Get(':id')
+  @ResponseMessage("Fetch a job by id")
   findOne(@Param('id') id: string) {
-    return this.jobService.findOne(+id);
+    return this.jobsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateJobDto: UpdateJobDto) {
-    return this.jobService.update(+id, updateJobDto);
+  update(
+    @Param('id') id: string, 
+    @Body() updateJobDto: UpdateJobDto,
+    @User() user: IUser
+  ) {
+    return this.jobsService.update(id, updateJobDto, user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.jobService.remove(+id);
+  @ResponseMessage("Delete a job")
+  remove(@Param('id') id: string, @User() user: IUser) {
+    return this.jobsService.remove(id, user);
   }
 }
