@@ -3,7 +3,7 @@ import { FilesService } from './files.service';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Public } from 'src/decorator/customize';
+import { Public, ResponseMessage } from 'src/decorator/customize';
 
 @Controller('files')
 export class FilesController {
@@ -11,6 +11,7 @@ export class FilesController {
 
   @Public()
   @Post('upload')
+  @ResponseMessage("Upload Single File")
   @UseInterceptors(FileInterceptor('quangney'))
   uploadFile(@UploadedFile(
     new ParseFilePipeBuilder()
@@ -25,7 +26,9 @@ export class FilesController {
     }),
 
   ) file: Express.Multer.File) {
-    console.log(file);
+    return {
+      fileName: file.filename
+    }
   }
 
   @Get()
