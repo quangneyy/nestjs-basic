@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { JobService } from './job.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
-import { ResponseMessage, User } from 'src/decorator/customize';
+import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { IUser } from 'src/users/users.interface';
 // import { Query } from 'mongoose';
 
@@ -17,6 +17,7 @@ export class JobController {
   }
 
   @Get()
+  @Public()
   @ResponseMessage("Fetch jobs with pagination")
   findAll(
     @Query("current") currentPage: string,
@@ -27,6 +28,7 @@ export class JobController {
   }
 
   @Get(':id')
+  @Public()
   @ResponseMessage("Fetch a job by id")
   findOne(@Param('id') id: string) {
     return this.jobsService.findOne(id);
