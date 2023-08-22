@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsEmail, IsEmpty, IsNotEmpty, IsNotEmptyObject, IsObject, ValidateNested } from "class-validator";
+import { IsEmail, IsEmpty, IsMongoId, IsNotEmpty, IsNotEmptyObject, IsObject, ValidateNested } from "class-validator";
 import mongoose from "mongoose";
 
 // data transfer object // class = { }
@@ -32,22 +32,25 @@ export class CreateUserDto {
     @IsNotEmpty({
         message: "Age không được để trống",
     })
-    age: number; 
+    age: number;
 
     @IsNotEmpty({
         message: "Gender không được để trống",
     })
-    gender: string; 
+    gender: string;
 
     @IsNotEmpty({
         message: "Address không được để trống",
     })
-    address: string; 
+    address: string;
 
     @IsNotEmpty({
         message: "Role không được để trống",
     })
-    role: string; 
+    @IsMongoId({
+        message: "Role có định dạng là mongo id",
+    })
+    role: mongoose.Schema.Types.ObjectId;
 
     @IsNotEmptyObject()
     @IsObject()
@@ -78,15 +81,15 @@ export class RegisterUserDto {
     @IsNotEmpty({
         message: "Age không được để trống",
     })
-    age: number; 
+    age: number;
 
     @IsNotEmpty({
         message: "Gender không được để trống",
     })
-    gender: string; 
+    gender: string;
 
     @IsNotEmpty({
         message: "Address không được để trống",
     })
-    address: string; 
+    address: string;
 }

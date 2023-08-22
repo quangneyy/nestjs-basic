@@ -14,7 +14,7 @@ import aqp from 'api-query-params';
 export class UsersService {
 
   constructor(
-    @InjectModel(UserM.name) 
+    @InjectModel(UserM.name)
     private userModel: SoftDeleteModel<UserDocument>
   ) { }
 
@@ -53,8 +53,8 @@ export class UsersService {
 
   async findAll(currentPage: number, limit: number, qs: string) {
     const { filter, sort, population } = aqp(qs);
-    delete filter.current; 
-    delete filter.pageSize; 
+    delete filter.current;
+    delete filter.pageSize;
 
     let offset = (+currentPage - 1) * (+limit);
     let defaultLimit = +limit ? +limit : 10;
@@ -69,7 +69,7 @@ export class UsersService {
       .select('-password')
       .populate(population)
       .exec();
-    
+
     return {
       meta: {
         current: currentPage, // tranh hien tai 
@@ -82,18 +82,20 @@ export class UsersService {
   }
 
   findOne(id: string) {
-    if (!mongoose.Types.ObjectId.isValid(id)) 
+    if (!mongoose.Types.ObjectId.isValid(id))
       return `not found user`;
 
     return this.userModel.findOne({
-        _id: id
-    }).select("-password") // exclude >< include
+      _id: id
+    })
+      .select("-password") // exclude >< include
+      .populate({ path: "role", select: { name: 1, _id: 1 } })
   }
 
   findOneByUsername(username: string) {
     return this.userModel.findOne({
       email: username
-    });
+    }).populate({ path: "role", select: { name: 1, permissions: 1 } })
   }
 
   isValidPassword(password: string, hash: string) {
@@ -102,23 +104,28 @@ export class UsersService {
 
   async update(updateUserDto: UpdateUserDto, user: IUser) {
     const updated = await this.userModel.updateOne(
-      { _id: updateUserDto._id},
+      { _id: updateUserDto._id },
       {
         ...updateUserDto,
         updatedBy: {
           _id: user._id,
           email: user.email
-      }
-    });
+        }
+      });
     return updated;
   }
 
   async remove(id: string, user: IUser) {
-    if (!mongoose.Types.ObjectId.isValid(id)) 
+    if (!mongoose.Types.ObjectId.isValid(id))
       return `not found user`;
 
+    const foundUser = await this.userModel.findById(id);
+    if (foundUser.email === "admin@gmail.com") {
+      throw new BadRequestException("Không thể xoá tài khoản admin@gmail.com")
+    }
+
     await this.userModel.updateOne(
-      {_id: id},
+      { _id: id },
       {
         deletedBy: {
           _id: user._id,
@@ -143,9 +150,9 @@ export class UsersService {
   }
 
   async register(user: RegisterUserDto) {
-    const { name, email, password, age, gender, address } = user; 
+    const { name, email, password, age, gender, address } = user;
     // add logic check email
-    const isExist = await this.userModel.findOne({email});
+    const isExist = await this.userModel.findOne({ email });
     if (isExist) {
       throw new BadRequestException(`Email: ${email} đã tồn tại trên hệ thống. Vui lòng sử dụng email khác.`);
     }
