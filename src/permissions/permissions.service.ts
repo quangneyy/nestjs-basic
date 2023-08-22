@@ -6,13 +6,13 @@ import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { IUser } from 'src/users/users.interface';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
-import { PermissionDocument } from './schemas/permission.schema';
+import { Permission, PermissionDocument } from './schemas/permission.schema';
 
 @Injectable()
 
 export class PermissionsService {
   constructor(
-    @InjectModel(Permissions.name)
+    @InjectModel(Permission.name)
     private permissionModel: SoftDeleteModel<PermissionDocument>
   ) { }
 
