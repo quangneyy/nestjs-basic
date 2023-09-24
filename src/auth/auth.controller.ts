@@ -5,12 +5,13 @@ import { Public, ResponseMessage, User } from './../decorator/customize';
 import { AuthService } from './auth.service';
 import { Body, Controller, Post, Res, Req, UseGuards, Get } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { RolesService } from 'src/roles/roles.service';
 
 @Controller("auth")
 export class AuthController {
   constructor(
-    private authService: AuthService
-
+    private authService: AuthService,
+    private rolesService: RolesService
   ) { }
 
   @Public()
@@ -18,7 +19,7 @@ export class AuthController {
   @Post('/login')
   @ResponseMessage("User Login")
   handleLogin(
-    @Req() req, 
+    @Req() req,
     @Res({ passthrough: true }) response: Response) {
     return this.authService.login(req.user, response);
   }
@@ -32,7 +33,9 @@ export class AuthController {
 
   @ResponseMessage("Get user information")
   @Get('/account')
-  handleGetAccount(@User() user: IUser) {
+  async handleGetAccount(@User() user: IUser) {
+    const temp = await this.rolesService.findOne(user.role._id) as any;
+    user.permissions = temp.permissions;
     return { user };
   }
 
