@@ -1,3 +1,6 @@
+import { Job, JobSchema } from 'src/job/schemas/job.schema';
+import { Subscriber, SubscriberSchema } from './../subscribers/schemas/subscriber.schema';
+import { MongooseModule } from '@nestjs/mongoose';
 import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
 import { Module } from '@nestjs/common';
@@ -31,6 +34,11 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
       }),
       inject: [ConfigService],
     }),
+
+    MongooseModule.forFeature([
+      { name: Subscriber.name, schema: SubscriberSchema },
+      { name: Job.name, schema: JobSchema },
+    ])
   ],
   controllers: [MailController],
   providers: [MailService]
