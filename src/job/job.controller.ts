@@ -33,7 +33,12 @@ export class JobController {
   findOne(@Param('id') id: string) {
     return this.jobsService.findOne(id);
   }
-
+  @Get('findAllJobByCompany/:id') 
+  @Public()
+  @ResponseMessage("Fetch jobs by company id")
+  findAllJobByCompany(@Param('id') id: string) {
+    return this.jobsService.findAllJobByCompany(id);
+  }
   @Patch(':id')
   update(
     @Param('id') id: string, 

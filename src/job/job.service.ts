@@ -73,6 +73,16 @@ export class JobService {
     
     return await this.jobModel.findById(id);
   }
+  async findAllJobByCompany(companyId: string) {
+    if (!mongoose.Types.ObjectId.isValid(companyId)) {
+      return `not found job`;
+    }
+
+    // Tìm tất cả công việc thuộc công ty có companyId tương ứng
+    const jobs = await this.jobModel.find({ 'company._id': companyId });
+
+    return jobs;
+  }
 
   async update(_id: string, updateJobDto: UpdateJobDto, user: IUser) {
     const updated = await this.jobModel.updateOne(
