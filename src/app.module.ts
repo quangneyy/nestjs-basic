@@ -16,6 +16,7 @@ import { DatabasesModule } from './databases/databases.module';
 import { SubscribersModule } from './subscribers/subscribers.module';
 import { MailModule } from './mail/mail.module';
 import { VnpayModule } from './vnpay/vnpay.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { VnpayModule } from './vnpay/vnpay.module';
     SubscribersModule,
     MailModule,
     VnpayModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
