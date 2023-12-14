@@ -7,7 +7,7 @@ import { Public, ResponseMessage } from 'src/decorator/customize';
 
 @Controller('files')
 export class FilesController {
-  constructor(private readonly filesService: FilesService) {}
+  constructor(private readonly filesService: FilesService) { }
 
   @Public()
   @Post('upload')
@@ -15,15 +15,15 @@ export class FilesController {
   @UseInterceptors(FileInterceptor('fileUpload'))
   uploadFile(@UploadedFile(
     new ParseFilePipeBuilder()
-    .addFileTypeValidator({
-      fileType: /^(jpg|jpeg|image\/jpeg|png|image\/png|gif|txt|pdf|application\/pdf|doc|docx|text\/plain)$/i,
-    })
-    .addMaxSizeValidator({
-      maxSize: 1024 * 1024 //kb = 1 MB
-    })
-    .build({
-      errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
-    }),
+      .addFileTypeValidator({
+        fileType: /^(jpg|jpeg|image\/jpeg|png|image\/png|gif|txt|pdf|application\/pdf|doc|docx|text\/plain)$/i,
+      })
+      .addMaxSizeValidator({
+        maxSize: 1024 * 1024 //kb = 1 MB
+      })
+      .build({
+        errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
+      }),
 
   ) file: Express.Multer.File) {
     return {

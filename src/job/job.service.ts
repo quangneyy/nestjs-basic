@@ -17,17 +17,17 @@ export class JobService {
 
   async create(createJobDto: CreateJobDto, user: IUser) {
     const {
-      name, skills, company, salary, quantity, 
-      level, description, startDate, endDate, 
+      name, skills, company, salary, quantity,
+      level, description, startDate, endDate,
       isActive, location
     } = createJobDto;
 
     let newJob = await this.jobModel.create({
-      name, skills, company, salary, quantity, 
+      name, skills, company, salary, quantity,
       level, description, startDate, endDate,
       isActive, location,
       createBy: {
-        _id: user._id, 
+        _id: user._id,
         email: user.email
       }
     })
@@ -70,7 +70,7 @@ export class JobService {
   async findOne(id: string) {
     if (!mongoose.Types.ObjectId.isValid(id))
       return `not found job`;
-    
+
     return await this.jobModel.findById(id);
   }
   async findAllJobByCompany(companyId: string) {
@@ -95,12 +95,12 @@ export class JobService {
         }
       }
     );
-      return updated;
+    return updated;
   }
 
   async remove(_id: string, user: IUser) {
-    if (!mongoose.Types.ObjectId.isValid(_id)) 
-      return `not found job`; 
+    if (!mongoose.Types.ObjectId.isValid(_id))
+      return `not found job`;
 
     await this.jobModel.updateOne(
       { _id },
