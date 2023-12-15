@@ -25,7 +25,7 @@ export class User {
   address: string;
 
   @Prop({ default: 0 })
-  amountOfMoney: number;
+  balance: number;
 
   @Prop({ type: Object })
   company: {
