@@ -8,7 +8,7 @@ import { IUser } from 'src/users/users.interface';
 
 @Controller('jobs')
 export class JobController {
-  constructor(private readonly jobsService: JobService) {}
+  constructor(private readonly jobsService: JobService) { }
 
   @Post()
   @ResponseMessage("Create a new job")
@@ -33,7 +33,7 @@ export class JobController {
   findOne(@Param('id') id: string) {
     return this.jobsService.findOne(id);
   }
-  @Get('findAllJobByCompany/:id') 
+  @Get('findAllJobByCompany/:id')
   @Public()
   @ResponseMessage("Fetch jobs by company id")
   findAllJobByCompany(@Param('id') id: string) {
@@ -41,7 +41,7 @@ export class JobController {
   }
   @Patch(':id')
   update(
-    @Param('id') id: string, 
+    @Param('id') id: string,
     @Body() updateJobDto: UpdateJobDto,
     @User() user: IUser
   ) {
