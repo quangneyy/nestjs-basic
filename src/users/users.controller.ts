@@ -8,12 +8,12 @@ import { ResponseMessage, User } from 'src/decorator/customize';
 
 @Controller('users') // => /users
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
-  @ResponseMessage("Create a new User") 
+  @ResponseMessage("Create a new User")
   async create(@Body() quangney: CreateUserDto, @User() user: IUser) {
-    let newUser = await this.usersService.create(quangney, user); 
+    let newUser = await this.usersService.create(quangney, user);
     return {
       _id: newUser?._id,
       createAt: newUser?.createdAt
@@ -26,7 +26,7 @@ export class UsersController {
     @Query("current") currentPage: string,
     @Query("pageSize") limit: string,
     @Query() qs: string,) {
-      return this.usersService.findAll(+currentPage, +limit, qs);
+    return this.usersService.findAll(+currentPage, +limit, qs);
   }
 
   @Public()

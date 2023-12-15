@@ -24,6 +24,9 @@ export class User {
   @Prop()
   address: string;
 
+  @Prop({ default: 0 })
+  amountOfMoney: number;
+
   @Prop({ type: Object })
   company: {
     _id: mongoose.Schema.Types.ObjectId;
