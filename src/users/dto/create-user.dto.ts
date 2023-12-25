@@ -29,32 +29,19 @@ export class CreateUserDto {
     })
     password: string;
 
-    @IsNotEmpty({
-        message: "Age không được để trống",
-    })
+    
     age: number;
 
-    @IsNotEmpty({
-        message: "Gender không được để trống",
-    })
+    
     gender: string;
 
-    @IsNotEmpty({
-        message: "Address không được để trống",
-    })
+    
     address: string;
 
-    @IsNotEmpty({
-        message: "Role không được để trống",
-    })
-    @IsMongoId({
-        message: "Role có định dạng là mongo id",
-    })
+ 
     role: mongoose.Schema.Types.ObjectId;
 
-    @IsNotEmptyObject()
-    @IsObject()
-    @ValidateNested()
+    
     @Type(() => Company)
     company: Company;
 }

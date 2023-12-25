@@ -122,6 +122,7 @@ export class UsersService {
       });
     return updated;
   }
+  
 
   async remove(id: string, user: IUser) {
     if (!mongoose.Types.ObjectId.isValid(id))

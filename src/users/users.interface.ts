@@ -2,6 +2,7 @@ export interface IUser {
     _id: string;
     name: string;
     email: string;
+    balance: number;
     role: {
         _id: string;
         name: string;
@@ -12,4 +13,11 @@ export interface IUser {
         apiPath: string;
         module: string;
     }[]
+    age?: number;
+        gender?: string;
+        address?: string;
+        company?: {
+            _id: string;
+            name: string;
+        }
 }
