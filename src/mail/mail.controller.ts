@@ -25,56 +25,105 @@ export class MailController {
   @Get()
   @Public()
   @ResponseMessage("Test email")
-  async handleTestEmail() {
-    await this.mailerService.sendMail({
-      to: "quangney.dev@gmail.com",
-      from: '"Support Team" <support@example.com>', // override default from
-      subject: 'Welcome to Nice App! Confirm your Email',
-      html: '<b>Welcome</b>',
-    })
-  }
   // async handleTestEmail() {
-  //   const jobs = [
-  //     {
-  //       name: "abc job",
-  //       company: "NeyX",
-  //       salary: "5000",
-  //       skills: ["React", "NodeJS"]
-  //     },
-  //     {
-  //       name: "abc job s2",
-  //       company: "NeyX",
-  //       salary: "5000",
-  //       skills: ["React", "NodeJS"]
-  //     },
-  //   ]
+  // const jobs = [
+  //   {
+  //     name: "abc job",
+  //     company: "Quang Ney",
+  //     salary: "5000",
+  //     skills: ["React", "Node.js"],
+  //   },
+  //   {
+  //     name: "abc job222",
+  //     company: "Q Ney222",
+  //     salary: "5000",
+  //     skills: ["React", "Node.js"],
+  //   },
+  // ]
 
-  //   const subscribers = await this.subscriberModel.find({});
-  //   for (const subs of subscribers) {
-  //     const subsSkills = subs.skills;
-  //     const jobWithMatchingSkills = await this.jobModel.find({ skills: { $in: subsSkills } });
-  //     if (jobWithMatchingSkills?.length) {
-  //       const jobs = jobWithMatchingSkills.map(item => {
-  //         return {
-  //           name: item.name,
-  //           company: item.company.name,
-  //           salary: `${item.salary}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " đ",
-  //           skills: item.skills
-  //         }
-  //       })
+  // const subscribers = await this.subscriberModel.find({});
+  // for (const subs of subscribers) {
+  //   const subsSkills = subs.skills;
+  //   const jobWithMatchingSkills = await this.jobModel.find({ skills: { $in: subsSkills } }); //todo
+  //   if (jobWithMatchingSkills?.length) {
+  //     const jobs = jobWithMatchingSkills.map(item => {
+  //       return {
+  //         name: item.name,
+  //         company: item.company.name,
+  //         salary: `${item.salary}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " đ",
+  //         skills: item.skills
+  //       }
+  //     })
 
-  //       await this.mailerService.sendMail({
-  //         to: "quangney.dev@gmail.com",
-  //         from: '"Support Team" <support@example.com>', // override default from
-  //         subject: 'Welcome to Nice App! Confirm your Email',
-  //         template: "new-job",
-  //         context: {
-  //           receiver: subs.name,
-  //           jobs: jobs
-  //         }
-  //       });
-  //     }
+  // await this.mailerService.sendMail({
+  //   to: "quangney.dev@gmail.com",
+  //   from: '"Support Team" <support@example.com>', // override default from
+  //   subject: 'Welcome to Nice App! Confirm your Email',
+  //   // html: '<b>Welcome</b>',
+  //   template: "new-job",
+  //   context: {
+  //     receiver: subs.name,
+  //     jobs: jobs
   //   }
-
+  // })
+  //   }
   // }
+
+  // await this.mailerService.sendMail({
+  //   to: "quangney.dev@gmail.com",
+  //   from: '"Support Team" <support@example.com>', // override default from
+  //   subject: 'Welcome to Nice App! Confirm your Email',
+  //   // html: '<b>Welcome</b>',
+  //   template: "new-job",
+  //   context: {
+  //     receiver: "Q",
+  //     jobs: jobs
+  //   }
+  // })
+  // }
+
+  async handleTestEmail() {
+    const jobs = [
+      {
+        name: "abc job",
+        company: "NeyX",
+        salary: "5000",
+        skills: ["React", "NodeJS"]
+      },
+      {
+        name: "abc job s2",
+        company: "NeyX",
+        salary: "5000",
+        skills: ["React", "NodeJS"]
+      },
+    ]
+
+    const subscribers = await this.subscriberModel.find({});
+    for (const subs of subscribers) {
+      const subsSkills = subs.skills;
+      const jobWithMatchingSkills = await this.jobModel.find({ skills: { $in: subsSkills } });
+      if (jobWithMatchingSkills?.length) {
+        const jobs = jobWithMatchingSkills.map(item => {
+          return {
+            name: item.name,
+            company: item.company.name,
+            salary: `${item.salary}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " đ",
+            skills: item.skills
+          }
+        })
+
+        await this.mailerService.sendMail({
+          to: "quangney.dev@gmail.com",
+          from: '"Support Team" <support@example.com>', // override default from
+          subject: 'Welcome to Nice App! Confirm your Email',
+          template: "new-job",
+          context: {
+            receiver: subs.name,
+            jobs: jobs,
+          }
+        });
+      }
+    }
+
+  }
 }
