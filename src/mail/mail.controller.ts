@@ -8,6 +8,7 @@ import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { SubscriberDocument } from 'src/subscribers/schemas/subscriber.schema';
 import { JobDocument } from 'src/job/schemas/job.schema';
 import { InjectModel } from '@nestjs/mongoose';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Controller('mail')
 export class MailController {
@@ -22,86 +23,37 @@ export class MailController {
   ) {
   }
 
+  @Cron(CronExpression.EVERY_30_SECONDS)
+  testCron() {
+
+  }
+
   @Get()
   @Public()
   @ResponseMessage("Test email")
-  // async handleTestEmail() {
-  // const jobs = [
-  //   {
-  //     name: "abc job",
-  //     company: "Quang Ney",
-  //     salary: "5000",
-  //     skills: ["React", "Node.js"],
-  //   },
-  //   {
-  //     name: "abc job222",
-  //     company: "Q Ney222",
-  //     salary: "5000",
-  //     skills: ["React", "Node.js"],
-  //   },
-  // ]
-
-  // const subscribers = await this.subscriberModel.find({});
-  // for (const subs of subscribers) {
-  //   const subsSkills = subs.skills;
-  //   const jobWithMatchingSkills = await this.jobModel.find({ skills: { $in: subsSkills } }); //todo
-  //   if (jobWithMatchingSkills?.length) {
-  //     const jobs = jobWithMatchingSkills.map(item => {
-  //       return {
-  //         name: item.name,
-  //         company: item.company.name,
-  //         salary: `${item.salary}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " đ",
-  //         skills: item.skills
-  //       }
-  //     })
-
-  // await this.mailerService.sendMail({
-  //   to: "quangney.dev@gmail.com",
-  //   from: '"Support Team" <support@example.com>', // override default from
-  //   subject: 'Welcome to Nice App! Confirm your Email',
-  //   // html: '<b>Welcome</b>',
-  //   template: "new-job",
-  //   context: {
-  //     receiver: subs.name,
-  //     jobs: jobs
-  //   }
-  // })
-  //   }
-  // }
-
-  // await this.mailerService.sendMail({
-  //   to: "quangney.dev@gmail.com",
-  //   from: '"Support Team" <support@example.com>', // override default from
-  //   subject: 'Welcome to Nice App! Confirm your Email',
-  //   // html: '<b>Welcome</b>',
-  //   template: "new-job",
-  //   context: {
-  //     receiver: "Q",
-  //     jobs: jobs
-  //   }
-  // })
-  // }
-
+  // @Cron(CronExpression.EVERY_30_SECONDS)
+  @Cron("0 0 0 * * 0") // 0.00 am every day
   async handleTestEmail() {
     const jobs = [
       {
         name: "abc job",
-        company: "NeyX",
+        company: "Quang Ney",
         salary: "5000",
-        skills: ["React", "NodeJS"]
+        skills: ["React", "Node.js"],
       },
       {
-        name: "abc job s2",
-        company: "NeyX",
+        name: "abc job222",
+        company: "Q Ney222",
         salary: "5000",
-        skills: ["React", "NodeJS"]
+        skills: ["React", "Node.js"],
       },
     ]
 
     const subscribers = await this.subscriberModel.find({});
+
     for (const subs of subscribers) {
       const subsSkills = subs.skills;
-      const jobWithMatchingSkills = await this.jobModel.find({ skills: { $in: subsSkills } });
+      const jobWithMatchingSkills = await this.jobModel.find({ skills: { $in: subsSkills } }); //todo
       if (jobWithMatchingSkills?.length) {
         const jobs = jobWithMatchingSkills.map(item => {
           return {
@@ -111,19 +63,85 @@ export class MailController {
             skills: item.skills
           }
         })
-
         await this.mailerService.sendMail({
           to: "quangney.dev@gmail.com",
           from: '"Support Team" <support@example.com>', // override default from
           subject: 'Welcome to Nice App! Confirm your Email',
+          // html: '<b>Welcome</b>',
           template: "new-job",
           context: {
             receiver: subs.name,
-            jobs: jobs,
+            jobs: jobs
           }
-        });
+        })
       }
+      // await this.mailerService.sendMail({
+      //   to: "quangney.dev@gmail.com",
+      //   from: '"Support Team" <support@example.com>', // override default from
+      //   subject: 'Welcome to Nice App! Confirm your Email',
+      //   // html: '<b>Welcome</b>',
+      //   template: "new-job",
+      //   context: {
+      //     receiver: subs.name,
+      //     jobs: jobs
+      //   }
+      // })
     }
 
+    // await this.mailerService.sendMail({
+    //   to: "quangney.dev@gmail.com",
+    //   from: '"Support Team" <support@example.com>', // override default from
+    //   subject: 'Welcome to Nice App! Confirm your Email',
+    //   // html: '<b>Welcome</b>',
+    //   template: "new-job",
+    //   context: {
+    //     receiver: "Q",
+    //     jobs: jobs,
+    //   }
+    // });
   }
+
+  // async handleTestEmail() {
+  //   const jobs = [
+  //     {
+  //       name: "abc job",
+  //       company: "NeyX",
+  //       salary: "5000",
+  //       skills: ["React", "NodeJS"]
+  //     },
+  //     {
+  //       name: "abc job s2",
+  //       company: "NeyX",
+  //       salary: "5000",
+  //       skills: ["React", "NodeJS"]
+  //     },
+  //   ]
+
+  //   const subscribers = await this.subscriberModel.find({});
+  //   for (const subs of subscribers) {
+  //     const subsSkills = subs.skills;
+  //     const jobWithMatchingSkills = await this.jobModel.find({ skills: { $in: subsSkills } });
+  //     if (jobWithMatchingSkills?.length) {
+  //       const jobs = jobWithMatchingSkills.map(item => {
+  //         return {
+  //           name: item.name,
+  //           company: item.company.name,
+  //           salary: `${item.salary}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " đ",
+  //           skills: item.skills
+  //         }
+  //       })
+
+  //       await this.mailerService.sendMail({
+  //         to: "quangney.dev@gmail.com",
+  //         from: '"Support Team" <support@example.com>', // override default from
+  //         subject: 'Welcome to Nice App! Confirm your Email',
+  //         template: "new-job",
+  //         context: {
+  //           receiver: subs.name,
+  //           jobs: jobs,
+  //         }
+  //       });
+  //     }
+  //  }
+
 }
