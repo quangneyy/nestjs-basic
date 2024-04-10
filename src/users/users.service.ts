@@ -7,10 +7,10 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import mongoose, { Model } from 'mongoose';
 import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
-import { User } from 'src/decorator/customize';
+import { User } from '..//decorator/customize';
 import aqp from 'api-query-params';
-import { USER_ROLE } from 'src/databases/sample';
-import { Role, RoleDocument } from 'src/roles/schemas/role.schema';
+import { USER_ROLE } from '../databases/sample';
+import { Role, RoleDocument } from '../roles/schemas/role.schema';
 
 @Injectable()
 export class UsersService {
@@ -162,26 +162,23 @@ export class UsersService {
       });
   }
 
-  async register(user: RegisterUserDto) {
-    const { name, email, password, age, gender, address } = user;
-    // add logic check email
-    const isExist = await this.userModel.findOne({ email });
-    if (isExist) {
-      throw new BadRequestException(`Email: ${email} đã tồn tại trên hệ thống. Vui lòng sử dụng email khác.`);
+    async register(user: RegisterUserDto) {
+      const { name, email, password, age, gender, address } = user;
+      const isExist = await this.userModel.findOne({ email });
+      if (isExist) {
+        throw new BadRequestException(`Email: ${email} đã tồn tại trên hệ thống. Vui lòng sử dụng email khác.`);
+      }
+      const userRole = await this.roleModel.findOne({ name: USER_ROLE });
+
+      const hashPassword = this.getHashPassword(password);
+      let newRegister = await this.userModel.create({
+        name, email,
+        password: hashPassword,
+        age,
+        gender,
+        address,
+        role: userRole?._id
+      })
+      return newRegister;
     }
-
-    // fetch user role
-    const userRole = await this.roleModel.findOne({ name: USER_ROLE });
-
-    const hashPassword = this.getHashPassword(password);
-    let newRegister = await this.userModel.create({
-      name, email,
-      password: hashPassword,
-      age,
-      gender,
-      address,
-      role: userRole?._id
-    })
-    return newRegister;
-  }
 }

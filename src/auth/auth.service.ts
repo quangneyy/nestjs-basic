@@ -6,7 +6,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import ms from 'ms';
 import { Response } from 'express';
-import { RolesService } from 'src/roles/roles.service';
+import { RolesService } from '../roles/roles.service';
 
 @Injectable()
 export class AuthService {
