@@ -1,75 +1,71 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
+import * as mongoose from 'mongoose';
 
-export type JobDocument = HydratedDocument<Job>;
+export type JobDocument = Job & mongoose.Document;
 
 @Schema({ timestamps: true })
 export class Job {
-  @Prop()
+  @Prop({ required: true })
   name: string;
 
-  @Prop()
+  @Prop({ required: true })
   skills: string[];
 
-  @Prop({ type: Object })
+  @Prop({ required: true, type: Object })
   company: {
     _id: mongoose.Schema.Types.ObjectId;
     name: string;
     logo: string;
   };
 
-  @Prop()
+  @Prop({ required: true })
   location: string;
 
-  @Prop()
+  @Prop({ required: true })
   salary: number;
 
-  @Prop()
+  @Prop({ required: true })
   quantity: number;
 
-  @Prop()
+  @Prop({ required: true })
   level: string;
 
-  @Prop()
+  @Prop({ required: true })
   description: string;
 
-  @Prop()
+  @Prop({ required: true })
   startDate: Date;
 
-  @Prop()
+  @Prop({ required: true })
   endDate: Date;
 
-  @Prop()
+  @Prop({ required: true })
   isActive: boolean;
 
-  @Prop({ type: Object })
-  createdBy: {
+  @Prop({ required: false, type: Object })
+  createdBy?: {
     _id: mongoose.Schema.Types.ObjectId;
     email: string;
   }
 
-  @Prop({ type: Object })
-  updatedBy: {
+  @Prop({ required: false, type: Object })
+  updatedBy?: {
     _id: mongoose.Schema.Types.ObjectId;
     email: string;
   }
 
-  @Prop({ type: Object })
-  deletedBy: {
+  @Prop({ required: false, type: Object })
+  deletedBy?: {
     _id: mongoose.Schema.Types.ObjectId;
     email: string;
   }
 
-  @Prop()
   createdAt: Date;
 
-  @Prop()
   updatedAt: Date;
 
-  @Prop()
   isDeleted: boolean;
 
-  @Prop()
   deletedAt: Date;
 }
 
