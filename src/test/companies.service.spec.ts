@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CompaniesService } from './companies.service';
+import { CompaniesService } from '../companies/companies.service';
 import { getModelToken } from '@nestjs/mongoose';
-import { Company } from './schemas/company.schema';
+import { Company } from '../companies/schemas/company.schema';
 import { IUser } from 'src/users/users.interface';
 
 describe('CompaniesService', () => {
@@ -11,7 +11,6 @@ describe('CompaniesService', () => {
   beforeEach(async () => {
     mockCompanyModel = {
       create: jest.fn(),
-      // Thêm mock cho các phương thức khác của model nếu cần
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -48,7 +47,6 @@ describe('CompaniesService', () => {
           _id: 'role-id',
           name: 'User Role',
         },
-        // Cung cấp thêm thông tin cho IUser nếu cần
       };
       mockCompanyModel.create.mockResolvedValue(createCompanyDto);
 
@@ -59,14 +57,11 @@ describe('CompaniesService', () => {
         createdBy: {
           _id: user._id,
           email: user.email,
-          // Thêm thông tin từ user nếu logic của bạn yêu cầu
         },
       });
       expect(result).toEqual(createCompanyDto);
     });
     
-
-    // Thêm các ca kiểm thử khác cho phương thức create ở đây nếu cần
     it('should throw an error when create fails', async () => {
       const createCompanyDto = {
         name: 'Test Company',
@@ -83,7 +78,6 @@ describe('CompaniesService', () => {
           _id: 'role-id',
           name: 'User Role',
         },
-        // Cung cấp thêm thông tin cho IUser nếu cần
       };
       const error = new Error('Database create error');
   
@@ -93,5 +87,4 @@ describe('CompaniesService', () => {
     });
   });
 
-  // Thêm các ca kiểm thử cho các phương thức khác của CompaniesService ở đây
 });

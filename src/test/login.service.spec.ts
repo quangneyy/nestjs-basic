@@ -63,9 +63,9 @@ describe('AuthService', () => {
       }),
     };
 
-    (usersService.findOneByUsername as jest.Mock).mockResolvedValueOnce(user);
-    (usersService.isValidPassword as jest.Mock).mockResolvedValueOnce(true);
-    (rolesService.findOne as jest.Mock).mockResolvedValueOnce(null);
+    (usersService.findOneByUsername as jest.Mock).mockReturnValueOnce(user);
+    (usersService.isValidPassword as jest.Mock).mockReturnValueOnce(true);
+    (rolesService.findOne as jest.Mock).mockReturnValueOnce(null);
 
     const result = await authService.validateUser(username, password);
 
@@ -76,7 +76,7 @@ describe('AuthService', () => {
     const username = 'nonexistent@example.com';
     const password = 'anyPassword';
 
-    (usersService.findOneByUsername as jest.Mock).mockResolvedValueOnce(null);
+    (usersService.findOneByUsername as jest.Mock).mockReturnValueOnce(null);
 
     const result = await authService.validateUser(username, password);
 
@@ -97,8 +97,8 @@ describe('AuthService', () => {
       }),
     };
 
-    (usersService.findOneByUsername as jest.Mock).mockResolvedValueOnce(user);
-    (usersService.isValidPassword as jest.Mock).mockResolvedValueOnce(false);
+    (usersService.findOneByUsername as jest.Mock).mockReturnValueOnce(user);
+    (usersService.isValidPassword as jest.Mock).mockReturnValueOnce(false); 
 
     const result = await authService.validateUser(username, password);
 
